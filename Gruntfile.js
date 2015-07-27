@@ -10,11 +10,6 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
-        opt: {
-            nl: grunt.util.linefeed,
-            header: '/*! <%= pkg.title %> - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %> */<%= opt.nl %>'
-        },
-
         /********************
          * REPLACE FILES INLINE
          ********************/
@@ -28,7 +23,7 @@ module.exports = function(grunt) {
                         {
                             pattern: /<(script|link)(.*?)\s(?:src|href)="(?:js\/|css\/)(.+)(\.js|\.css)"(?:><\/script>|\/>)/ig,
                             replacement: function(match,p1,p2,p3,p4){
-                                p1=='link' && (p1='style');
+                                p1.replace('link','style');
                                 return ['<'+p1+p2+'>',grunt.file.read('target/'+p3+'.min'+p4),'</'+p1+'>'].join('');
                             }
                         }
@@ -41,17 +36,9 @@ module.exports = function(grunt) {
          * MINIFY FILES
          ********************/
         uglify: {
-
-            main: {
-                files: {'target/main.min.js': ['src/js/main.js']}
-            },
-            proto: {
-                files: {'target/proto.min.js': ['src/js/proto.js']}
-            },
-            ui: {
-                files: {'target/ui.min.js': ['src/js/ui.js']}
-            }
-
+            main  : { files: { 'target/main.min.js'  : ['src/js/main.js']  } },
+            proto : { files: { 'target/proto.min.js' : ['src/js/proto.js'] } },
+            ui    : { files: { 'target/ui.min.js'    : ['src/js/ui.js']    } }
         },
         cssmin: {
             main: {
