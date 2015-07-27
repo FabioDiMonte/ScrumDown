@@ -26,18 +26,12 @@ module.exports = function(grunt) {
                 options: {
                     replacements: [
                         {
-                            pattern: /(<script(?:.*?)src="js\/)(.+)(.js"><\/script>)/ig,
-                            replacement: function(match,p1,p2){
-                                return ['<script>',grunt.file.read('target/'+p2+'.min.js'),'</script>'].join('');
-                            }
-                        },
-                        {
-                            pattern: /(<link(?:.*?)href="css\/)(.+)(.css"\/>)/ig,
-                            replacement: function(match,p1,p2){
-                                return ['<style>',grunt.file.read('target/'+p2+'.min.css'),'</style>'].join('');
+                            pattern: /<(script|link)(.*?)\s(?:src|href)="(?:js\/|css\/)(.+)(\.js|\.css)"(?:><\/script>|\/>)/ig,
+                            replacement: function(match,p1,p2,p3,p4){
+                                p1=='link' && (p1='style');
+                                return ['<'+p1+p2+'>',grunt.file.read('target/'+p3+'.min'+p4),'</'+p1+'>'].join('');
                             }
                         }
-
                     ]
                 }
             }
