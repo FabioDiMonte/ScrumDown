@@ -1,0 +1,49 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#scrumdown {
+    background-color: green;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+
+.sd-bar {
+    height: 30px;
+    position: absolute;
+    width: 80%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.sd-bar-cont,
+.sd-bar-fill {
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+
+.sd-bar-cont {
+    background-color: #fff;
+    border: 2px solid #777;
+    border-radius: 3px;
+    box-shadow: 0 0 8px 2px #fff;
+    overflow: hidden;
+}
+
+.sd-bar-fill {
+    background-color: #026dc5;
+}
+
+.sd-bar-text {
+    display: block;
+    font-family: helvetica,arial,sans-serif;
+    font-size: 70px;
+    position: relative;
+    text-align: center;
+    text-shadow: 0 0 10px #fff;
+    top: 50px;
+}
