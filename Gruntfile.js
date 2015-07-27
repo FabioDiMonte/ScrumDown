@@ -62,13 +62,11 @@ module.exports = function(grunt) {
 
         },
         cssmin: {
-            target: {
+            main: {
                 files: [{
                     expand: true,
-                    cwd: 'src/css',
-                    src: ['*.css'],
-                    dest: 'target',
-                    ext: '.min.css'
+                    cwd: 'src/css', src: ['*.css'],
+                    dest: 'target', ext: '.min.css'
                 }]
             }
         },
@@ -127,9 +125,6 @@ module.exports = function(grunt) {
      * REGISTER TASKS
      *
      ****************************************/
-
-    // External tasks
-    grunt.loadTasks('tasks');
 
     // Full tasks
     grunt.registerTask('build', ['clean:target', 'copy', 'uglify', 'cssmin', 'string-replace', 'clean:target']);
