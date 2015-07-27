@@ -12,9 +12,7 @@ module.exports = function(grunt) {
 
         opt: {
             nl: grunt.util.linefeed,
-
             header: '/*! <%= pkg.title %> - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %> */<%= opt.nl %>'
-
         },
 
         /********************
