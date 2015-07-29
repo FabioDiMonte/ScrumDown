@@ -13,10 +13,10 @@ var ScrumDown = (function($){
 
         this._ID = id;
         this.$el = $(id);
-        
+
         this._blinkLength = 500;
         this._blinking = false;
-        
+
         this._tickLength = 10;
         this._running = false;
 
@@ -29,14 +29,14 @@ var ScrumDown = (function($){
             startTime: 10000,
             repeat: 1 // set to 0 will repeat infinitely
         };
-        
+
         if(options){
             options.startTime!=null && (options.startTime = parseTime(options.startTime));
             $.extend(true, this._options, options);
         }
-        
+
         this._colors = getGradientArray();
-        
+
         render.call(this);
     }
 
@@ -46,7 +46,7 @@ var ScrumDown = (function($){
      * @type {{reset: Function, pause: Function, startFrom: Function, start: Function, restart: Function, stop: Function, setStartTime: Function, setRepeat: Function, setLog: Function}}
      */
     ScrumDown.prototype = {
-        
+
         reset: function(){
             this._info.elapsedTime = 0;
             this._info.repeated = 0;
@@ -93,18 +93,18 @@ var ScrumDown = (function($){
             this.pause();
             this.startBlink();
         },
-        
+
         startBlink: function(){
             this._blinker = setTimeout(blink.bind(this), this._blinkLength);
         },
         stopBlink: function(){
             this._blinker && clearTimeout(this._blinker);
         },
-        
-        
+
         setStartTime : function(data) { !this._running && (this._options.startTime = parseTime(data)); },
         setRepeat    : function(data) { !this._running && data === Number(data) && (this._options.repeat = data); },
         setLog       : function(data) { !this._running && data === Boolean(data) && (this._options.log = data); }
+
     };
 
     /********************
@@ -118,7 +118,7 @@ var ScrumDown = (function($){
         this._info.elapsedTime += this._tickLength;
         var perc = this._info.elapsedTime / this._options.startTime;
         updateBar.call(this,perc);
-        
+
         if(this._info.elapsedTime >= this._options.startTime){
             this._info.repeated++;
             if(this._options.repeat==0 || (this._info.repeated<this._options.repeat)){
@@ -129,7 +129,7 @@ var ScrumDown = (function($){
             }
         }
     }
-    
+
     function blink(){
         var cols = [this._colors[99],'#ffffff'];
         this._blinking = !this._blinking;
@@ -145,32 +145,32 @@ var ScrumDown = (function($){
             this.$el.append(getBar());
         }
     }
-    
+
     function getBar(){
         var $bar = $('<div/>').addClass('sd-bar'),
             $barCont = $('<div/>').addClass('sd-bar-cont'),
             $barFill = $('<div/>').addClass('sd-bar-fill'),
             $barText = $('<span/>').addClass('sd-bar-text');
-        
+
         return $bar.append($barCont.append($barFill)).append($barText);
     }
     function updateBar(perc){
         perc || (perc=0);
         this.$el.find('.sd-bar-fill').css('width',(100-(perc*100))+'%');
         this.$el.css('background-color',this._colors[Math.round(perc*100)]);
-        
+
         var time = this._options.startTime - this._info.elapsedTime + 999,
             secs = Math.floor(time / 1000),
             mins = Math.floor(secs / 60),
             timer = '- ' + (mins + ':' + ('00'+(secs - (mins*60))).substr(-2));
-        
+
         this.$el.find('.sd-bar-text').text(timer);
     }
-    
+
     function getGradientArray(){
         var canvas = document.createElement('canvas'),
             context = canvas.getContext('2d');
-        
+
         canvas.width = 100;
         canvas.height = 1;
 
@@ -180,14 +180,15 @@ var ScrumDown = (function($){
         grd.addColorStop(1, 'red');
         context.fillStyle = grd;
         context.fillRect(0, 0, 100, 1);
-        
-        
+
         var colors = [],
             imageData = context.getImageData(0, 0, 100, 1),
             data = imageData.data;
+
         var x, y, R, G, B,
             imageHeight = 1,
             imageWidth = 100;
+
         for(y = 0; y < imageHeight; y++) {
             for(x = 0; x < imageWidth; x++) {
                 R = ('00' + (data[((imageWidth * y) + x) * 4]).toString(16)).substr(-2);
@@ -196,7 +197,7 @@ var ScrumDown = (function($){
                 colors.push('#'+R+G+B);
             }
         }
-        
+
         return colors;
     }
 
@@ -209,18 +210,19 @@ var ScrumDown = (function($){
     function error(msg){
         console.log('ERROR:',msg);
     }
-    
+
     /*
      * PARSING
      */
     function parseTime(timeStr){
         if(timeStr===Number(timeStr)) return timeStr;
+
         var res, reg = /([0-9]{1,2})([hms])/g,
             timeObj = {h:0,m:0,s:0};
-        
+
         while((res = reg.exec(timeStr)) !== null)
             timeObj[res[2]] = Number(res[1]);
-        
+
         return (timeObj.s*1000) + (timeObj.m*60*1000) + (timeObj.h*60*60*1000);
     }
     function unparseTime(ms){
@@ -232,14 +234,14 @@ var ScrumDown = (function($){
         timeObj.h = hours;
         timeObj.m = (mins - (hours*60));
         timeObj.s = (secs - (mins*60));
-            
+
         var ret='';
         ret += timeObj.h ? timeObj.h+'h' : '';
         ret += timeObj.m ? timeObj.m+'m' : '';
         ret += timeObj.s+'s';
         return ret
     }
-    
+
     return ScrumDown;
-    
+
 }(jQuery));
