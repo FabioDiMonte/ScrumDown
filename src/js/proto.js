@@ -26,12 +26,12 @@ var ScrumDown = (function($){
         };
         this._options = {
             log: false,
-            startTime: 1000,
-            repeat: 1 // set 0 to repeat infinitely
+            startTime: 10000,
+            repeat: 1 // set to 0 will repeat infinitely
         };
         
         if(options){
-            options.startTime && isNaN(options.startTime) && (options.startTime = parseTime(options.startTime));
+            options.startTime!=null && (options.startTime = parseTime(options.startTime));
             $.extend(true, this._options, options);
         }
         
@@ -101,10 +101,10 @@ var ScrumDown = (function($){
             this._blinker && clearTimeout(this._blinker);
         },
         
-        setStartTime : function(data) { !this._running && data === Number(data)  && (this._options.startTime = data); },
-        setRepeat    : function(data) { !this._running && data === Number(data)  && (this._options.repeat = data);    },
-        setLog       : function(data) { !this._running && data === Boolean(data) && (this._options.log = data);       }
         
+        setStartTime : function(data) { !this._running && (this._options.startTime = parseTime(data)); },
+        setRepeat    : function(data) { !this._running && data === Number(data) && (this._options.repeat = data); },
+        setLog       : function(data) { !this._running && data === Boolean(data) && (this._options.log = data); }
     };
 
     /********************
@@ -176,17 +176,18 @@ var ScrumDown = (function($){
 
         var grd = context.createLinearGradient(0, 0, 100, 0);
         grd.addColorStop(0.5, 'green');
+        grd.addColorStop(0.85, 'orange');
         grd.addColorStop(1, 'red');
         context.fillStyle = grd;
         context.fillRect(0, 0, 100, 1);
         
-        var colors = [];
-        var imageData = context.getImageData(0, 0, 100, 1);
-        var data = imageData.data;
         
-        var x, y, R, G, B;
-        var imageHeight = 1;
-        var imageWidth = 100;
+        var colors = [],
+            imageData = context.getImageData(0, 0, 100, 1),
+            data = imageData.data;
+        var x, y, R, G, B,
+            imageHeight = 1,
+            imageWidth = 100;
         for(y = 0; y < imageHeight; y++) {
             for(x = 0; x < imageWidth; x++) {
                 R = ('00' + (data[((imageWidth * y) + x) * 4]).toString(16)).substr(-2);
@@ -213,13 +214,12 @@ var ScrumDown = (function($){
      * PARSING
      */
     function parseTime(timeStr){
-        debugger;
-        var res,reg = /([0-9]{1,2})([hms]{1})/g,
+        if(timeStr===Number(timeStr)) return timeStr;
+        var res, reg = /([0-9]{1,2})([hms])/g,
             timeObj = {h:0,m:0,s:0};
         
-        while ((res = reg.exec(timeStr)) !== null){
+        while((res = reg.exec(timeStr)) !== null)
             timeObj[res[2]] = Number(res[1]);
-        }
         
         return (timeObj.s*1000) + (timeObj.m*60*1000) + (timeObj.h*60*60*1000);
     }

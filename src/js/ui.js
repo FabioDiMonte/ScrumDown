@@ -41,8 +41,7 @@ var ScrumDownUI = (function($){
 
             case 13://RETURN
                 e.preventDefault();
-                var $input = this.$el.find('.sd-control-input');
-                $input.is(':focus') && this._SD.startFrom($input.val());
+                this._SD.startFrom(this.$el.find('.sd-control-input').val());
                 break;
 
             case 27://ESC
