@@ -15,7 +15,7 @@ In details, you should:
   - execute `grunt build` and then open the built `build/index.min.html`
 
 ## How it works
-Insert the desired countdown in the form `NNhNNmNNs` where `NN` is the desired amount of time.
+Insert the desired countdown in the form `[NN]h[NN]m[NN]s` where `[NN]` is the desired amount of time.  
 eg:
 `2h30m15s`, `15m`, `24h`, `2h20s`, `70s`, `80m`, `30s10m`, ...
 
