@@ -162,7 +162,11 @@ var ScrumDown = (function($){
         var time = this._options.startTime - this._info.elapsedTime + 999,
             secs = Math.floor(time / 1000),
             mins = Math.floor(secs / 60),
-            timer = '- ' + (mins + ':' + ('00'+(secs - (mins*60))).substr(-2));
+            hors = Math.floor(mins / 60),
+            hStr = hors ? hors + ':' : '',
+            mStr = ('00'+(mins - (hors*60))).substr(-2) + ':',
+            sStr = ('00'+(secs - (mins*60))).substr(-2),
+            timer = '- ' + hStr + mStr + sStr;
 
         this.$el.find('.sd-bar-text').text(timer);
     }
